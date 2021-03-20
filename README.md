@@ -20,6 +20,6 @@ Implemented with Azure Functions Durable Entities.
 * (required) **OUTPUT_QUEUE_OR_TOPIC_NAME** - queue or topic name to output messages to.
 * (optional) **SERVICE_BUS_CONN_STRING** - Azure Service Bus connection string. If specified, messages will be sent to a queue/topic in that Service Bus namespace. If omitted, messages will be sent to a Storage queue in the underlying Storage account.
 
-
+## How to deploy to Azure
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fscale-tone%2Fsftp-watcher%2Fmain%2Farm-template.json)
