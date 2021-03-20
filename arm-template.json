@@ -1,0 +1,133 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "deploymentName": {
+            "type": "string",
+            "defaultValue": "[concat('sftpw', uniqueString(resourceGroup().id))]",
+            "metadata": {
+                "description": "A unique random base name for this service"
+            }
+        },
+        "FOLDERS_TO_WATCH": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "JSON, that defines folders to monitor. E.g. \"{'my-server.com/myfolder/*.*': {'user1': 'pwd1'}, 'my-other-server/*.xml': {'user2': 'pwd2'}}\" "
+            }
+        },
+        "POLLING_INTERVAL_CRON_EXP": {
+            "type": "string",
+            "defaultValue": "*/5 * * * * *",
+            "metadata": {
+                "description": "CRON expression, that defines the polling period"
+            }
+        },
+        "OUTPUT_QUEUE_OR_TOPIC_NAME": {
+            "type": "string",
+            "defaultValue": "sft-change-notifications",
+            "metadata": {
+                "description": "Queue name to output events to"
+            }
+        }
+    },
+    "variables": {
+        "storageAccountName": "[concat(parameters('deploymentName'), 'st')]",
+        "hostingPlanName": "[concat(parameters('deploymentName'), '-plan')]",
+        "functionAppName": "[concat(parameters('deploymentName'), '-function')]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2019-06-01",
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[variables('storageAccountName')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "properties": {
+                "supportsHttpsTrafficOnly": true,
+                "minimumTlsVersion": "TLS1_2"
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2016-09-01",
+            "name": "[variables('hostingPlanName')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "name": "[variables('hostingPlanName')]"
+            },
+            "sku": {
+                "name": "EP1",
+                "Tier": "ElasticPremium"
+            }
+        },
+        {
+            "apiVersion": "2018-11-01",
+            "type": "Microsoft.Web/sites",
+            "name": "[variables('functionAppName')]",
+            "location": "[resourceGroup().location]",
+            "kind": "functionapp",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+            ],
+            "resources": [
+                {
+                    "apiVersion": "2015-08-01",
+                    "name": "web",
+                    "type": "sourcecontrols",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/sites/', variables('functionAppName'))]"
+                    ],
+                    "properties": {
+                        "RepoUrl": "https://github.com/scale-tone/sftp-watcher",
+                        "branch": "main"
+                    }
+                }
+            ],
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
+                "siteConfig": {
+                    "appSettings": [
+
+                        {
+                            "name": "FOLDERS_TO_WATCH",
+                            "value": "[parameters('FOLDERS_TO_WATCH')]"
+                        },
+                        {
+                            "name": "POLLING_INTERVAL_CRON_EXP",
+                            "value": "[parameters('POLLING_INTERVAL_CRON_EXP')]"
+                        },
+                        {
+                            "name": "OUTPUT_QUEUE_OR_TOPIC_NAME",
+                            "value": "[parameters('OUTPUT_QUEUE_OR_TOPIC_NAME')]"
+                        },
+
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTSHARE",
+                            "value": "[variables('functionAppName')]"
+                        },
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~3"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "dotnet"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
