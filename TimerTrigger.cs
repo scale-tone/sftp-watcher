@@ -23,7 +23,7 @@ namespace SftpWatcher
                     nameof(SftpToStorageQueueWatcherEntity) : nameof(SftpToServiceBusQueueWatcherEntity);
 
                 // Deriving entityKey from folder name
-                string key = folder.Name.Replace("/", "-").Replace("\\", "-").Replace("#", "-").Replace("?", "-");
+                string key = folderFullPath.Replace("/", "-").Replace("\\", "-").Replace("#", "-").Replace("?", "-");
 
                 await durableClient.SignalEntityAsync<ISftpWatcherEntity>(new EntityId(entityName, key), e => e.Watch(folderFullPath));
             }
