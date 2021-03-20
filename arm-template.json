@@ -83,7 +83,8 @@
                     ],
                     "properties": {
                         "RepoUrl": "https://github.com/scale-tone/sftp-watcher",
-                        "branch": "main"
+                        "branch": "main",
+                        "IsManualIntegration": true
                     }
                 }
             ],
