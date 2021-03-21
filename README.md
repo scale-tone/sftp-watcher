@@ -20,6 +20,7 @@ Implemented with Azure Functions Durable Entities. Uses [SSH.NET](https://github
 * (required) **POLLING_INTERVAL_CRON_EXP** - CRON expression, that defines the polling period. E.g. `*/5 * * * * *`.
 * (required) **OUTPUT_QUEUE_OR_TOPIC_NAME** - queue or topic name to output messages to.
 * (optional) **SERVICE_BUS_CONN_STRING** - Azure Service Bus connection string. If specified, messages will be sent to a queue/topic in that Service Bus namespace. If omitted, messages will be sent to a Storage queue in the underlying Storage account.
+* (optional) **STAY_SILENT_AT_FIRST_RUN** - set it to `true`, if you don't want `FileAdded` events to be emitted for every existing file at first run.
 
 ## How to deploy to Azure
 
