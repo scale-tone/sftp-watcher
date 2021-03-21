@@ -10,6 +10,7 @@ Implemented with Azure Functions Durable Entities. Uses [SSH.NET](https://github
     {
 	    'my-server.com/myfolder/*.*': {'my-user': 'my-password'}, 
 	    'my-other-server.org/*.xml': {'my-other-user': 'password-to-my-other-server'}
+	    ...
     }
     ```
     Folder URL may or may not contain a subpath, but it is required to contain server name and file mask (at the end). All subfolders within the given path are recursively traversed.
