@@ -15,14 +15,15 @@ namespace SftpWatcher
         public IDictionary<string, DateTime> files { get; set; }
         public string error { get; set; }
 
-        protected SftpWatcherEntity()
-        {
-            this.files = new Dictionary<string, DateTime>();
-        }
-
         // Does the actual job
         public void Watch(string folderFullPath)
         {
+            bool isFirstRun = this.files == null;
+            if (isFirstRun)
+            {
+                this.files = new Dictionary<string, DateTime>();
+            }
+
             this.error = string.Empty;
             try
             {
@@ -36,8 +37,13 @@ namespace SftpWatcher
                     var maskRegex = new Regex(Regex.Escape(fileMask).Replace("\\*", ".+"));
                     var newFiles = ListFilesInFolder(client, folderName, maskRegex);
 
-                    // Emitting events and then updating our state
-                    this.EmitEvents(serverName, this.files, newFiles);
+                    // Emitting events
+                    if (!isFirstRun || string.IsNullOrEmpty(Environment.GetEnvironmentVariable("STAY_SILENT_AT_FIRST_RUN")))
+                    {
+                        this.EmitEvents(serverName, this.files, newFiles);
+                    }
+
+                    // Updating our state
                     this.files = newFiles;
                 }
             }
