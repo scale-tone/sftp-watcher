@@ -31,13 +31,11 @@ namespace SftpWatcher
     {
         public StorageQueueMessage(WhatHappenedEnum eventType, string filePath)
         {
-            this.eventType = eventType;
+            this.EventType = eventType.ToString("g");
             this.FilePath = filePath;
         }
 
-        public string EventType { get { return this.eventType.ToString("g"); } }
+        public string EventType { get; private set; }
         public string FilePath { get; private set; }
-
-        private readonly WhatHappenedEnum eventType;
     }
 }
