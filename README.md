@@ -19,7 +19,9 @@ Implemented with Azure Functions Durable Entities. Uses [SSH.NET](https://github
 
 * (required) **POLLING_INTERVAL_CRON_EXP** - CRON expression, that defines the polling period. E.g. `*/5 * * * * *`.
 * (required) **OUTPUT_QUEUE_OR_TOPIC_NAME** - queue or topic name to output messages to.
-* (optional) **SERVICE_BUS_CONN_STRING** - Azure Service Bus connection string. If specified, messages will be sent to a queue/topic in that Service Bus namespace. If omitted, messages will be sent to a Storage queue in the underlying Storage account.
+* (optional) **SERVICE_BUS_CONN_STRING** - Azure Service Bus connection string. 
+	If specified, messages will be sent to a queue/topic in that Service Bus namespace. `Message.Label` will be set to the string representation of [WhatHappenedEnum](https://github.com/scale-tone/sftp-watcher/blob/main/SftpWatcherEntity.cs#L175) (so that you could potentially use [Service Bus topic filters](https://docs.microsoft.com/en-us/azure/service-bus-messaging/topic-filters)), message body will contain full path to the changed file.
+	If omitted, messages will be sent to a Storage queue in the underlying Storage account. Message body will contain JSON representation of [StorageQueueMessage](https://github.com/scale-tone/sftp-watcher/blob/main/SftpToStorageQueueWatcherEntity.cs#L30).
 * (optional) **STAY_SILENT_AT_FIRST_RUN** - set it to `true`, if you don't want `FileAdded` events to be emitted for every existing file at first run.
 
 ## How to deploy to Azure
