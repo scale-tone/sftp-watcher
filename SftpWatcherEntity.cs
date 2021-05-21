@@ -30,8 +30,15 @@ namespace SftpWatcher
                 // Intentionally NOT passing any creds via parameters or entity state. Don't want them to be stored anywhere.
                 this.GetParams(folderFullPath, out var serverName, out var folderName, out var fileMask, out var userName, out var password);
 
+                string timeoutString = Environment.GetEnvironmentVariable("SFTP_TIMEOUT_IN_SECONDS");
+                var timeout = TimeSpan.FromSeconds(string.IsNullOrEmpty(timeoutString) ? 5 : int.Parse(timeoutString));
+
                 using (var client = new SftpClient(serverName, userName, password))
                 {
+                    // Not sure which one to set, so setting both
+                    client.ConnectionInfo.Timeout = timeout;
+                    client.OperationTimeout = timeout;
+
                     client.Connect();
 
                     var maskRegex = new Regex(Regex.Escape(fileMask).Replace("\\*", ".+"));
