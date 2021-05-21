@@ -25,6 +25,7 @@ Implemented with Azure Functions Durable Entities. Uses [SSH.NET](https://github
 	
 	If omitted, messages will be sent to a Storage queue in the underlying Storage account. Message body will contain JSON representation of [StorageQueueMessage](https://github.com/scale-tone/sftp-watcher/blob/main/SftpToStorageQueueWatcherEntity.cs#L30).
 * (optional) **STAY_SILENT_AT_FIRST_RUN** - set it to `true`, if you don't want `FileAdded` events to be emitted for every existing file at first run.
+* (optional) **SFTP_TIMEOUT_IN_SECONDS** - timeout for all SFTP operations, in seconds. Default value is 5 seconds.
 
 ## How to deploy to Azure
 
