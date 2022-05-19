@@ -25,7 +25,7 @@ namespace SftpWatcher
                 {
                     entityName = nameof(SftpToServiceBusQueueWatcherEntity);
                 }
-                else if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("EVENT_GRID_TOPIC_URL")))
+                else if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("EVENT_GRID_TOPIC_KEY")))
                 {
                     entityName = nameof(SftpToEventGridTopicWatcherEntity);
                 }

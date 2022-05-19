@@ -32,7 +32,7 @@ namespace SftpWatcher
         // Required boilerplate
         [FunctionName(nameof(SftpToEventGridTopicWatcherEntity))]
         public static Task Run([EntityTrigger] IDurableEntityContext ctx,
-            [EventGrid(TopicEndpointUri = "EVENT_GRID_TOPIC_URL", TopicKeySetting = "EVENT_GRID_TOPIC_KEY")] ICollector<EventGridEvent> storageQueueCollector
+            [EventGrid(TopicEndpointUri = "OUTPUT_QUEUE_OR_TOPIC_NAME", TopicKeySetting = "EVENT_GRID_TOPIC_KEY")] ICollector<EventGridEvent> storageQueueCollector
         ) => ctx.DispatchAsync<SftpToEventGridTopicWatcherEntity>(storageQueueCollector);
     }
 }
