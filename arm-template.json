@@ -27,7 +27,21 @@
             "type": "string",
             "defaultValue": "sftp-change-notifications",
             "metadata": {
-                "description": "Queue name to output events to"
+                "description": "Queue name to output events to. For Event Grid this should be the full custom topic URL."
+            }
+        },
+        "SERVICE_BUS_CONN_STRING": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Azure Service Bus connection string. Specify it, if you wish events to be sent to a Service Bus queue/topic. Otherwise leave blank."
+            }
+        },
+        "EVENT_GRID_TOPIC_KEY": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Azure Event Grid custom topic key. Specify it, if you wish events to be sent to an Event Grid custom topic.. Otherwise leave blank."
             }
         }
     },
@@ -104,6 +118,14 @@
                         {
                             "name": "OUTPUT_QUEUE_OR_TOPIC_NAME",
                             "value": "[parameters('OUTPUT_QUEUE_OR_TOPIC_NAME')]"
+                        },
+                        {
+                            "name": "SERVICE_BUS_CONN_STRING",
+                            "value": "[parameters('SERVICE_BUS_CONN_STRING')]"
+                        },
+                        {
+                            "name": "EVENT_GRID_TOPIC_KEY",
+                            "value": "[parameters('EVENT_GRID_TOPIC_KEY')]"
                         },
 
                         {
