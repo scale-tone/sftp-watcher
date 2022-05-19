@@ -35,3 +35,5 @@ Implemented with Azure Functions Durable Entities. Uses [SSH.NET](https://github
 ## How to deploy to Azure
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fscale-tone%2Fsftp-watcher%2Fmain%2Farm-template.json)
+
+The above button will deploy these sources to a newly created Azure Functions instance (with Premium plan).
