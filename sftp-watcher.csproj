@@ -5,10 +5,11 @@
     <RootNamespace>sftp_watcher</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.11" />
-    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.DurableTask" Version="2.4.0" />
-    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="4.0.4" />
-    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="4.2.1" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.DurableTask" Version="2.7.1" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="4.0.5" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="4.3.0" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.EventGrid" Version="3.2.0" />
     <PackageReference Include="ssh.net" Version="2020.0.1" />
   </ItemGroup>
   <ItemGroup>

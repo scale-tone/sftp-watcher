@@ -18,9 +18,17 @@ namespace SftpWatcher
             {
                 string folderFullPath = folder.Name;
 
-                // Using Storage Queue or Service Bus watcher, depending on the config
-                string entityName = string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SERVICE_BUS_CONN_STRING")) ?
-                    nameof(SftpToStorageQueueWatcherEntity) : nameof(SftpToServiceBusQueueWatcherEntity);
+                // Using Storage Queue, Service Bus or Event Grid watcher, depending on the config
+                string entityName = nameof(SftpToStorageQueueWatcherEntity);
+
+                if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SERVICE_BUS_CONN_STRING")))
+                {
+                    entityName = nameof(SftpToServiceBusQueueWatcherEntity);
+                }
+                else if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("EVENT_GRID_TOPIC_URL")))
+                {
+                    entityName = nameof(SftpToEventGridTopicWatcherEntity);
+                }
 
                 // Deriving entityKey from folder name
                 string key = folderFullPath.Replace("/", "-").Replace("\\", "-").Replace("#", "-").Replace("?", "-");
