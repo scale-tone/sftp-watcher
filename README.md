@@ -17,7 +17,7 @@ Implemented with Azure Functions Durable Entities. Uses [SSH.NET](https://github
     
     Password may be a plain string password or (preferrably) an Azure Key Vault secret reference (e.g. `https://my-vault.vault.azure.net/secrets/my-sftp-password/123456789`). In the latter case you'll need to configure a Managed Identity for your Function App instance.
     
-    Per each individual folder an instance of Azure Functions Durable Entity is created, which stores the current folder structure in its state and periodically tries to detect changes. Once created, you can monitor those Durable Entities with [Durable Functions Monitor](https://github.com/scale-tone/DurableFunctionsMonitor).
+    Per each individual folder an instance of Azure Functions Durable Entity is created, which stores the current folder structure in its state and periodically tries to detect changes. Once created, you can monitor those Durable Entities with [Durable Functions Monitor](https://github.com/microsoft/DurableFunctionsMonitor).
 
 * (required) **POLLING_INTERVAL_CRON_EXP** - CRON expression, that defines the polling period. E.g. `*/5 * * * * *`.
 * (required) **OUTPUT_QUEUE_OR_TOPIC_NAME** - queue or topic name to output messages to. When publishing events to Event Grid, this value should contain full custom topic URL, e.g. `https://my-event-grid-custom-topic.northeurope-1.eventgrid.azure.net/api/events`.
