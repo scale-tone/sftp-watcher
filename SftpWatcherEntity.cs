@@ -5,7 +5,8 @@ using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using Newtonsoft.Json;
-using Microsoft.Azure.Services.AppAuthentication;
+using Azure.Identity;
+using Azure.Core;
 
 namespace SftpWatcher
 {
@@ -159,8 +160,10 @@ namespace SftpWatcher
                 return secret;
             }
 
-            string accessToken = new AzureServiceTokenProvider()
-                .GetAccessTokenAsync("https://vault.azure.net").Result;
+            string accessToken = new DefaultAzureCredential()
+                .GetTokenAsync(new TokenRequestContext(new [] { "https://vault.azure.net" } ))
+                .Result
+                .Token;
 
             // Taking the secret out of KeyVault
             using (var client = new WebClient())
